@@ -23,15 +23,16 @@ class ReLU(activation_function):
     def __init__(self):
         super().__init__(relu, relu_prime)
 
-def softmax(z):
-    return np.exp(z) / np.sum(np.exp(z), axis=0)
+def stable_softmax(z):
+    z -= np.max(z)
+    return np.exp(z) / np.sum(np.exp(z))
 
-def softmax_prime(z):
-    return softmax(z) * (1 - softmax(z))
+def stable_softmax_prime(z):
+    return stable_softmax(z) * (1 - stable_softmax(z))
 
 class Softmax(activation_function):
     def __init__(self):
-        super().__init__(softmax, softmax_prime)
+        super().__init__(stable_softmax, stable_softmax_prime)
 
 def cross_entropy(a, y):
     return -np.sum(y * np.log(a))
@@ -42,3 +43,13 @@ def cross_entropy_prime(a, y):
 class CrossEntropy(cost_function):
     def __init__(self):
         super().__init__(cross_entropy, cross_entropy_prime)
+
+def sigmoid(z):
+    return 1 / (1 + np.exp(-z))
+
+def sigmoid_prime(z):
+    return sigmoid(z) * (1 - sigmoid(z))
+
+class Sigmoid(activation_function):
+    def __init__(self):
+        super().__init__(sigmoid, sigmoid_prime)

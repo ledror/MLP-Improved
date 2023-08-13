@@ -8,10 +8,10 @@ class Layer(object):
         self.output_size = output_size
         self.activation = activation
         self.weights = np.random.randn(output_size, input_size) / np.sqrt(input_size)
-        self.bias = np.random.randn(output_size, 1) / np.sqrt(input_size)
-
-    def forward(self, input):
-        z = self.weights @ input + self.bias
+        self.bias = np.random.randn(output_size, 1)
+        
+    def forward(self, x):
+        z = self.weights @ x + self.bias
         return z, self.activation.activate(z)
 
     def backward(self, z, delta):
